@@ -6,6 +6,7 @@ import org.owller.CubeWorld.Entity.CubePlayer;
 import org.owller.CubeWorld.Owller;
 import org.owller.CubeWorld.Server.Network.Packet.Exceptions.InvalidPacketException;
 import org.owller.CubeWorld.Server.Network.Packet.Server.CubePlayerJoinPacket;
+import org.owller.CubeWorld.Server.Network.Packet.Server.CubeWorldSeedPacket;
 
 public class CubePacket {
     public static CubePacket getServerVersionPacket() {
@@ -25,6 +26,10 @@ public class CubePacket {
         return new CubePacket(CubePacketType.SERVER_FULL);
     }
     
+    public static CubePacket makePacket(CubePacketType type) {
+        return new CubePacket(type);
+    }
+    
     public static CubePacket makePacket(CubePacketType type, byte[] data) {
         return new CubePacket(type, data);
     }
@@ -32,6 +37,10 @@ public class CubePacket {
     public static CubePacket makePacket(CubePacketType type, CubeEntity entity) throws InvalidPacketException {
         if(type.equals(CubePacketType.PLAYER_JOIN)) {
             return ((CubePlayerJoinPacket) type).makePacket((CubePlayer) entity);
+        }
+        
+        if(type.equals(CubePacketType.MAP_SEED)) {
+            return ((CubeWorldSeedPacket) type).makePacket(entity);
         }
         
         throw new InvalidPacketException(type);
@@ -54,7 +63,7 @@ public class CubePacket {
     
     @Override
     public String toString() {
-        String s = "[" + this.type.getPacketID();
+        String s = "[PACKET: ";
         
         for(byte b : this.getData().getByteArray()) {
             s += ", " + b;

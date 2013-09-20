@@ -9,7 +9,9 @@ public class CubeLocation {
     private double pitch;
     private double yaw;
     
-    public CubeLocation() {
+    private CubeWorld world;
+    
+    public CubeLocation(CubeWorld world) {
         this.x = 0.0d;
         this.y = 0.0d;
         this.z = 0.0d;
@@ -17,6 +19,8 @@ public class CubeLocation {
         this.roll = 0.0d;
         this.pitch = 0.0d;
         this.yaw = 0.0d;
+        
+        this.world = world;
     }
     
     public double getX() {return this.x;}
@@ -38,4 +42,6 @@ public class CubeLocation {
     public float getFloatRoll() {return (float) this.roll;}
     public float getFloatPitch() {return (float) this.pitch;}
     public float getFloatYaw() {return (float) this.yaw;}
+    
+    public CubeWorld getWorld() {return this.world;}
 }

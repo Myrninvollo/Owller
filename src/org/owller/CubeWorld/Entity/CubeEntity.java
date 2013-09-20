@@ -2,6 +2,7 @@ package org.owller.CubeWorld.Entity;
 
 import org.owller.CubeWorld.World.CubeLocation;
 import org.owller.CubeWorld.World.CubeVector;
+import org.owller.CubeWorld.World.CubeWorld;
 
 public class CubeEntity {
     private static final byte HOSTILE_LEVEL_HOSTILE = 1;
@@ -31,15 +32,17 @@ public class CubeEntity {
     
     private int xp;
     
+    private CubeWorld world;
+    
     //Entity Appearance
     private CubeEntityAppearance appearance;
     
-    public CubeEntity() {
+    public CubeEntity(CubeWorld world) {
         this.id = CubeEntity.requestNewID();
         
         this.type = CubeEntityType.ELF_MALE;
         
-        this.location = new CubeLocation();
+        this.location = new CubeLocation(world);
         this.velocity = new CubeVector();
         this.altVelocity = new CubeVector();
         this.acceleration = new CubeVector();
@@ -48,6 +51,8 @@ public class CubeEntity {
         
         this.hp = 1.0f;
         this.mp = 1.0f;
+        
+        world.addEntity(this);
     }
     
     public long getID() {return this.id;}
@@ -62,6 +67,7 @@ public class CubeEntity {
     public float getMana() {return this.mp;}
     public int getXP() {return this.xp;}
     public int getLevel() {return this.getXP() / 100;}
+    public CubeWorld getWorld() {return this.location.getWorld();}
     
     //Returns how 'e' See's 'this'
     public byte getHostileLevel(CubeEntity e) {

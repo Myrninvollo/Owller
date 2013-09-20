@@ -27,24 +27,23 @@ public class CubeSocketThread extends CubeThread {
     public void run() {
         while(this.getManager() != null && this.getManager().getSocket() != null && 
                 this.getManager().getSocket().isConnected() && !this.getManager().getSocket().isInputShutdown()) {
-            getLogger().info("Checking for Packets...");
             try {
                 DataInputStream is = new DataInputStream(this.manager.getSocket().getInputStream());
+                getLogger().debug("Checking for Packets...");
                 byte id = is.readByte();
                 getLogger().debug("Client Sent byte: " + id);
                 CubePacketType packetType = CubePacketType.getByID(id);
                 CubePacket packet = packetType.decode(is);
                 this.recievePacket(packet);
             } catch(IOException e) {
-                if(e.getMessage().equals("Socket is closed")) break;
                 getLogger().debug("Caught Exception: " + e.getMessage());
-                continue;
+                break;
             } catch (InvalidPacketTypeException e) {
                 getLogger().debug("Caught Exception: " + e.getMessage());
-                continue;
+                break;
             } catch(InvalidPacketException e) {
                 getLogger().debug("Caught Exception: " + e.getMessage());
-                continue;
+                break;
             }
         }
         
@@ -79,13 +78,13 @@ public class CubeSocketThread extends CubeThread {
             if(this.getManager().isConnnected()) return;
             
             //Player is Trying to Join, let's get started.
-            CubePlayer player = new CubePlayer(this.manager);
+            CubePlayer player = new CubePlayer(this.manager, this.getManager().getServer().getServer().getDefaultWorld());
             CubePacket playerJoin = CubePacket.makePacket(CubePacketType.PLAYER_JOIN, player);
-            if(this.sendPacket(playerJoin)) {
-                getLogger().debug("Sent!");
-            } else {
-                getLogger().debug("Failed to Send!");
-            }
+            
+            this.sendPacket(playerJoin);
+            this.sendPacket(CubePacket.makePacket(CubePacketType.MAP_SEED, player));
+            //TODO: Add Login messages, etc
+            
         }
     }
     
@@ -97,9 +96,9 @@ public class CubeSocketThread extends CubeThread {
     }
     
     public void trySendPacket(CubePacket packet) throws IOException {
-        //getLogger().debug("Sending: " + packet.toString());
+        getLogger().debug("Sending: " + packet.toString());
         DataOutputStream os = new DataOutputStream(this.manager.getSocket().getOutputStream());
-        getLogger().debug("Writing Packet...");
+        getLogger().debug("Writing Packet... " + packet.getType().getName());
         os.write(packet.getData().getByteArray());
         getLogger().debug("Flushing Packet...");
         os.flush();

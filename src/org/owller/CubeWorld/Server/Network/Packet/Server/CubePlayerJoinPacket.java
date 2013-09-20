@@ -4,11 +4,8 @@ import org.owller.CubeWorld.Entity.CubePlayer;
 import org.owller.CubeWorld.Server.Network.Packet.CubePacket;
 import org.owller.CubeWorld.Server.Network.Packet.CubePacketType;
 import org.owller.CubeWorld.Server.Network.Packet.Exceptions.InvalidPacketException;
-import org.owller.CubeWorld.Server.Network.Packet.Shared.CubeEntityUpdatePacket;
 
-public class CubePlayerJoinPacket extends CubePacketType {
-    private CubePlayer makingPlayer;
-    
+public class CubePlayerJoinPacket extends CubePacketType {    
     public CubePlayerJoinPacket() {
         super((byte) 16, "Player Join");
     }
@@ -20,7 +17,7 @@ public class CubePlayerJoinPacket extends CubePacketType {
         CubePacket packet = new CubePacket(this);
         packet.getData().addInt(0);
         packet.getData().addLong(player.getID());
-        packet.getData().addData(CubeEntityUpdatePacket.makeEntityUpdateByteArray(player));
+        packet.getData().addData(new byte[4456]);
         return packet;
     }
 }
