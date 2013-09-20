@@ -1,5 +1,6 @@
 package org.owller.CubeWorld.Server.Network;
 
+import java.io.IOException;
 import java.net.Socket;
 import org.owller.CubeWorld.Server.CubeSocketServer;
 import org.owller.CubeWorld.Server.Threads.CubeSocketThread;
@@ -31,11 +32,15 @@ public class CubeSocketManager {
     public boolean isConnnected() {return this.isConnected;}
     
     public void setVersion(byte[] v) {
-        if(v.length < 4) return;
-        this.clientVersion = Byte.toString(v[0]) + Byte.toString(v[1]) + "." + Byte.toString(v[2]) + Byte.toString(v[3]);
+        if(v.length < 5) return;
+        this.clientVersion = Byte.toString(v[1]) + Byte.toString(v[2]) + "." + Byte.toString(v[3]) + Byte.toString(v[4]);
     }
 
     public void closeSocket(CubeSocketCloseReason reason) {
+        try {
+            this.socket.getInputStream().close();
+            this.socket.getOutputStream().close();
+        } catch(IOException e) {}
         this.getServer().closeConnection(this, reason);
     }
 }

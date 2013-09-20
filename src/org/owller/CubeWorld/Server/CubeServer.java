@@ -35,7 +35,7 @@ public class CubeServer {
     
     public void start() {
         getLogger().info("Starting Server.");
-        this.socketServer.start();
+        if(!this.socketServer.start()) return;
         this.serverThread.startThread();
         getLogger().info("Started Server!");
     }

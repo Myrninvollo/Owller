@@ -1,6 +1,5 @@
 package org.owller.CubeWorld.Server.Network.Packet;
 
-import java.nio.ByteBuffer;
 import org.owller.CubeWorld.Arrays.CubeByteArray;
 import org.owller.CubeWorld.Entity.CubeEntity;
 import org.owller.CubeWorld.Entity.CubePlayer;
@@ -46,23 +45,12 @@ public class CubePacket {
     
     public CubePacket(CubePacketType type, byte[] data) {
         this.type = type;
-        this.data = new CubeByteArray(data);
+        this.data = new CubeByteArray(type.getPacketID());
+        this.data.addData(data);
     }
     
     public CubePacketType getType() {return this.type;}
     public CubeByteArray getData() {return this.data;}
-    
-    public byte[] makePacket() {
-        byte[] data = new byte[this.getData().getByteArray().length + 1];
-        data[0] = this.getType().getPacketID();
-        if(this.getData().getByteArray().length > 0) {
-            for(int i = 0; i < this.getData().getByteArray().length; i++) {
-                data[i+1] = this.getData().getByteArray()[i];
-            }
-        }
-        
-        return data;
-    }
     
     @Override
     public String toString() {

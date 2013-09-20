@@ -10,6 +10,11 @@ public class CubeByteArray {
         this(new byte[0]);
     }
     
+    public CubeByteArray(byte data) {
+        this();
+        this.addByte(data);
+    }
+    
     public CubeByteArray(byte[] array) {
         this.array = array;
     }

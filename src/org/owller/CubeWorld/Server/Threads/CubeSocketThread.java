@@ -27,20 +27,23 @@ public class CubeSocketThread extends CubeThread {
     public void run() {
         while(this.getManager() != null && this.getManager().getSocket() != null && 
                 this.getManager().getSocket().isConnected() && !this.getManager().getSocket().isInputShutdown()) {
+            getLogger().info("Checking for Packets...");
             try {
                 DataInputStream is = new DataInputStream(this.manager.getSocket().getInputStream());
                 byte id = is.readByte();
                 getLogger().debug("Client Sent byte: " + id);
                 CubePacketType packetType = CubePacketType.getByID(id);
                 CubePacket packet = packetType.decode(is);
-                
                 this.recievePacket(packet);
-                
             } catch(IOException e) {
+                if(e.getMessage().equals("Socket is closed")) break;
+                getLogger().debug("Caught Exception: " + e.getMessage());
                 continue;
             } catch (InvalidPacketTypeException e) {
+                getLogger().debug("Caught Exception: " + e.getMessage());
                 continue;
             } catch(InvalidPacketException e) {
+                getLogger().debug("Caught Exception: " + e.getMessage());
                 continue;
             }
         }
@@ -78,7 +81,11 @@ public class CubeSocketThread extends CubeThread {
             //Player is Trying to Join, let's get started.
             CubePlayer player = new CubePlayer(this.manager);
             CubePacket playerJoin = CubePacket.makePacket(CubePacketType.PLAYER_JOIN, player);
-            this.sendPacket(playerJoin);
+            if(this.sendPacket(playerJoin)) {
+                getLogger().debug("Sent!");
+            } else {
+                getLogger().debug("Failed to Send!");
+            }
         }
     }
     
@@ -92,7 +99,10 @@ public class CubeSocketThread extends CubeThread {
     public void trySendPacket(CubePacket packet) throws IOException {
         //getLogger().debug("Sending: " + packet.toString());
         DataOutputStream os = new DataOutputStream(this.manager.getSocket().getOutputStream());
-        os.write(packet.makePacket());
+        getLogger().debug("Writing Packet...");
+        os.write(packet.getData().getByteArray());
+        getLogger().debug("Flushing Packet...");
         os.flush();
+        getLogger().debug("Flushed!");
     }
 }

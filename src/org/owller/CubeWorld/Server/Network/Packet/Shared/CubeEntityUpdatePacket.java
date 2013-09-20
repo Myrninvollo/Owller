@@ -9,7 +9,24 @@ public class CubeEntityUpdatePacket {
     public static CubeByteArray makeEntityUpdateByteArray(CubeEntity entity) {
         BitSet bs = new BitSet(64);
         bs.set(0, 64, false);
-        bs.set(0, 16, true);
+        
+        //Create a "Bare Minimum" packet
+        bs.set(0);
+        bs.set(1);
+        bs.set(2);
+        bs.set(3);
+        bs.set(4);
+        bs.set(5);
+        bs.set(6);
+        bs.set(7);
+        bs.set(8);
+        bs.set(9);
+        bs.set(10);
+        bs.set(11);
+        bs.set(12);
+        bs.set(40);
+        bs.set(45);
+        
         return makeEntityUpdateByteArray(entity, bs, null);
     }
     
@@ -302,6 +319,8 @@ public class CubeEntityUpdatePacket {
             //Add Mana Cubes(?) (Unsigned Integer)
             cba.addInt(Integer.MIN_VALUE);
         }
+        
+        System.out.println((cba.getByteArray().length*8) + " bits in.. length...");
         
         return cba;
     }
