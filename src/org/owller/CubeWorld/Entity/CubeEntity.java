@@ -4,9 +4,9 @@ import org.owller.CubeWorld.World.CubeLocation;
 import org.owller.CubeWorld.World.CubeVector;
 
 public class CubeEntity {
-    private static final byte HOSTILE_LEVEL_HOSTILE = -127;
-    private static final byte HOSTILE_LEVEL_FRIENDLY = -124;
-    private static final byte HOSTILE_LEVEL_PET = -123;
+    private static final byte HOSTILE_LEVEL_HOSTILE = 1;
+    private static final byte HOSTILE_LEVEL_FRIENDLY = 4;
+    private static final byte HOSTILE_LEVEL_PET = 5;
     
     private static long nextID = Long.MIN_VALUE;
     

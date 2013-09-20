@@ -55,20 +55,28 @@ public class CubeEntityUpdatePacket {
         }
         
         if(bs.get(5)) {
+            //Send Entity Viewport Pitch (Float)
             cba.addData(entity.getViewport());
         }
         
         if(bs.get(6)) {
-            //TODO: Add Physics Flag
+            //TODO: Add Physics Flag (Unsigned Int)
             cba.addData(Integer.MIN_VALUE + 1);
         }
         
         if(bs.get(7)) {
-            cba.addData(entity.getHostileLevel(target));
+            //Send Hostile Relation to Player (Unsigned Byte)
+            cba.addData(Byte.MIN_VALUE + entity.getHostileLevel(target));
         }
         
         if(bs.get(8)) {
-            cba.addData(Intentity.getType().getID());
+            //Send Entity Type ID (Unsigned Integer)
+            cba.addData(Integer.MIN_VALUE - entity.getType().getID());
+        }
+        
+        if(bs.get(9)) {
+            //TODO: Add Send Current "Mode" (Unsigned Byte)
+            cba.addData(Byte.MIN_VALUE);
         }
         
         return cba;
