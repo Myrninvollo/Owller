@@ -26,15 +26,21 @@ public class CubeByteArray {
         this.array = newData;
     }
 
-    public void addData(int i) {
+    public void addByte(byte i) {
+        byte[] b = new byte[1];
+        b[0] = i;
+        this.addData(b);
+    }
+
+    public void addInt(int i) {
         this.addData(ByteBuffer.allocate(4).putInt(i).array());
     }
     
-    public void addData(long l) {
+    public void addLong(long l) {
         this.addData(ByteBuffer.allocate(8).putLong(l).array());
     }
     
-    public void addData(float f) {
+    public void addFloat(float f) {
         this.addData(ByteBuffer.allocate(4).putFloat(f).array());
     }
     
@@ -42,14 +48,18 @@ public class CubeByteArray {
         this.addData(a.getByteArray());
     }
     
-    public void addData(BitSet bits) {
+    public void addBitSet(BitSet bits) {
         long value = 0L;
         for (int i = 0; i < bits.length(); ++i) {
           value += bits.get(i) ? (1L << i) : 0L;
         }
         
-        System.out.println("Adding " + value);
-        
-        this.addData(value);
+        this.addLong(value);
+    }
+
+    public void addString(String name) {
+        for(char c : name.toCharArray()) {
+            this.addByte((byte) c);
+        }
     }
 }

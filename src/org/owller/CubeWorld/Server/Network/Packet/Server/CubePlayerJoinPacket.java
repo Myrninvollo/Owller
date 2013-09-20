@@ -18,8 +18,8 @@ public class CubePlayerJoinPacket extends CubePacketType {
         if(!(player instanceof CubePlayer))  throw new InvalidPacketException(this);
         
         CubePacket packet = new CubePacket(this);
-        packet.getData().addData(0);
-        packet.getData().addData(player.getID());
+        packet.getData().addInt(0);
+        packet.getData().addLong(player.getID());
         packet.getData().addData(CubeEntityUpdatePacket.makeEntityUpdateByteArray(player));
         return packet;
     }

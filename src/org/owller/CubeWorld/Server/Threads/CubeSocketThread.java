@@ -90,7 +90,7 @@ public class CubeSocketThread extends CubeThread {
     }
     
     public void trySendPacket(CubePacket packet) throws IOException {
-        getLogger().debug("Sending: " + packet.toString());
+        //getLogger().debug("Sending: " + packet.toString());
         DataOutputStream os = new DataOutputStream(this.manager.getSocket().getOutputStream());
         os.write(packet.makePacket());
         os.flush();
